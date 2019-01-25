@@ -1,7 +1,6 @@
 <div>
   <input type="file" (change)="onSelectFileChange($event)" title=" " />
   <div class="btn btn-block btn-lg text-center">Upload Image</div>
-  <img #image src="{{source}}" id="thumbnail" (load)="update()">
-  <canvas #canvas id="canvas" width="500" height="500">
-    </canvas>
+  <img #image src="{{source}}" id="thumbnail" (load)="setupCanvas()">
+  <app-annotation-canvas #canvas ></app-annotation-canvas>
 </div>
