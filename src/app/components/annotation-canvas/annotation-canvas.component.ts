@@ -35,7 +35,7 @@ export class AnnotationCanvasComponent implements OnInit {
     return y - this.canvas.nativeElement.offsetTop;
   }
 
-  @HostListener('mouseup')
+  @HostListener('mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
     this.mouseDown = false;
   }
