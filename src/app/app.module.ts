@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AnnotatedImageComponent } from './components/annotated-image/annotated-image.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AnnotatedImageComponent
   ],
   imports: [
     BrowserModule,
