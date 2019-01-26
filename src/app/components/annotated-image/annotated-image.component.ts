@@ -10,8 +10,8 @@ export class AnnotatedImageComponent implements OnInit {
   @ViewChild('image') image: ElementRef;
   @ViewChild('canvas') canvas: AnnotationCanvasComponent;
 
-  private source:string;
-  
+  private source: string;
+
 
   constructor() { }
 
@@ -25,19 +25,21 @@ export class AnnotatedImageComponent implements OnInit {
 
 
   onSelectFileChange($event) {
-		//cancel check
-		let files = $event.srcElement.files;
-		if (files.length > 0) {
-      console.log($event.srcElement.files[0]);
-			//base64 encode file (TODO extract to a service)
-			let reader = new FileReader();
-			reader.onload = (e) => {
-        this.source = (<FileReader>e.target).result.toString();
-        //canvas context
-			};
-			reader.readAsDataURL($event.srcElement.files[0]);
-			
-		}
-	}
+    //cancel check
+    let files = $event.srcElement.files;
+    if (files.length > 0) {
+      console.log(files);
+      if (files.length > 0 && files[0].type.startsWith("image")) {
+        //base64 encode file (TODO extract to a service)
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.source = (<FileReader>e.target).result.toString();
+          //canvas context
+        };
+        reader.readAsDataURL($event.srcElement.files[0]);
+      }
+
+    }
+  }
 
 }
