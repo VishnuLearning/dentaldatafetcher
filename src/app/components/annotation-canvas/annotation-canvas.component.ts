@@ -51,7 +51,8 @@ export class AnnotationCanvasComponent implements OnInit {
       let sx = Math.min(x, this.startx);
       let sy = Math.min(y, this.starty);
       this.ctx.rect(sx, sy, w, h);
-      this.ctx.fillRect(sx, sy, w, h);
+      this.ctx.strokeRect(sx, sy, w, h);
+      this.ctx.strokeStyle = "#FF0000";
       console.log(sx, sy, w, h);
     }
   }
