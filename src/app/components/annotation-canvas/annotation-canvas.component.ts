@@ -56,10 +56,16 @@ export class AnnotationCanvasComponent implements OnInit {
     else {
       for (let i = 0; i < this.annotations.length; i++) {
         if (this.annotations[i].contains(this.getX(event.clientX), this.getY(event.clientY))) {
+          // set boundary to green. Not great code, will refactor later
+          // this will suggest user of the shape he selected.
+          // important for overlapping boundaries
+          this.annotations[i].strokeStyle = "orange";
+          this.refresh();
           //TODO: display form to get details.
           //form will have option to delete, edit title, description, 
           //possibly pick stroke and fill color as well but that is for later
           this.annotations[i].title = window.prompt("enter title");
+          this.annotations[i].strokeStyle = "red";
           this.refresh();
           break;
         }
