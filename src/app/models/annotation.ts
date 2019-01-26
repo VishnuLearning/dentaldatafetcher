@@ -1,6 +1,6 @@
 export class Annotation {
-    private _title: string = "";
-    private _description: string = "";
+    private _title: string = "ANNOT";
+    private _description: string = "Some description";
     left: number;
     right: number;
     top: number;
@@ -22,6 +22,8 @@ export class Annotation {
         ctx.strokeStyle = this.strokeStyle;
         ctx.fill();
         ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.fillText(this._title, this.left+5, this.bottom-5);
         //ctx.strokeRect(this.left, this.top, this.width(), this.height());
     }
 

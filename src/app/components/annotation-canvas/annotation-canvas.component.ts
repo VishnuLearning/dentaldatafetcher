@@ -23,6 +23,7 @@ export class AnnotationCanvasComponent implements OnInit {
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.ctx.font = "12px Arial";
     this.annotationImage = new CanvasImage(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
   }
 
