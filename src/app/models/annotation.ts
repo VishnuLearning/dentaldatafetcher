@@ -24,7 +24,6 @@ export class Annotation {
         ctx.stroke();
         ctx.fillStyle = "red";
         ctx.fillText(this._title, this.left+5, this.bottom-5);
-        //ctx.strokeRect(this.left, this.top, this.width(), this.height());
     }
 
     // Determine if a point is inside the shape's bounds

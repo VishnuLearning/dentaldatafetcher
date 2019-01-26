@@ -50,7 +50,21 @@ export class AnnotationCanvasComponent implements OnInit {
 
   @HostListener('mouseup', ['$event'])
   onMouseup(event: MouseEvent) {
-    this.mouseDown = false;
+    if(this.mouseDown) {
+      this.mouseDown = false;
+    }
+    else {
+      for (let i = 0; i < this.annotations.length; i++) {
+        if (this.annotations[i].contains(this.getX(event.clientX), this.getY(event.clientY))) {
+          //TODO: display form to get details.
+          //form will have option to delete, edit title, description, 
+          //possibly pick stroke and fill color as well but that is for later
+          this.annotations[i].title = window.prompt("enter title");
+          this.refresh();
+          break;
+        }
+      }
+    }
   }
 
   @HostListener('mousemove', ['$event'])
@@ -65,13 +79,13 @@ export class AnnotationCanvasComponent implements OnInit {
 
   @HostListener('mousedown', ['$event'])
   onMousedown(event: MouseEvent) {
-    this.mouseDown = true;
-    //TODO: check if alt key is pressed (event.altKey). If yes, then we are moving the current shape, else drawing new shape.
-    // for now we are only drawing new shape
-    this.startx = this.getX(event.clientX);
-    this.starty = this.getY(event.clientY);
-    this.currentAnnotation = new Annotation();
-    this.annotations.push(this.currentAnnotation);
+    if (event.altKey || event.ctrlKey) {
+      this.mouseDown = true;
+      this.startx = this.getX(event.clientX);
+      this.starty = this.getY(event.clientY);
+      this.currentAnnotation = new Annotation();
+      this.annotations.push(this.currentAnnotation);
+    } 
   }
 
 }
