@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Annotation } from 'src/app/models/annotation';
+import { CanvasImage } from 'src/app/models/canvasimage';
 
 @Component({
   selector: 'app-annotation-canvas',
@@ -7,24 +9,34 @@ import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@
 })
 export class AnnotationCanvasComponent implements OnInit {
   @ViewChild('canvas') canvas: ElementRef;
-  private _thumbnail: ElementRef;
+  
   private ctx: CanvasRenderingContext2D;
   private mouseDown: boolean = false;
   private startx:number;
   private starty:number;
-
-  constructor() { }
+  private annotations:Annotation[];
+  private currentAnnotation: Annotation;
+  private annotationImage: CanvasImage;
+  constructor() {
+    this.annotations = new Array<Annotation>();
+  }
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.annotationImage = new CanvasImage(this.canvas.nativeElement.width, this.canvas.nativeElement.height);
   }
 
   setup(t: ElementRef) {
-    this._thumbnail = t;
-    let h = this._thumbnail.nativeElement.height;
-    let w = this._thumbnail.nativeElement.width;
-    this.canvas.nativeElement.height = 500 * h / w;
-    this.ctx.drawImage(this._thumbnail.nativeElement, 10, 10, 480, 480 * h / w);
+    this.annotationImage.image = t;
+    this.annotationImage.draw(this.ctx);
+  }
+
+  refresh() {
+    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.annotationImage.draw(this.ctx);
+    this.annotations.forEach(element => {
+      element.draw(this.ctx);
+    });
   }
 
   getX(x) {
@@ -43,24 +55,22 @@ export class AnnotationCanvasComponent implements OnInit {
   @HostListener('mousemove', ['$event'])
   onMousemove(event: MouseEvent) {
     if (this.mouseDown) {
-      this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
       let x = this.getX(event.clientX);
       let y = this.getY(event.clientY);
-      let w = Math.abs(x - this.startx);
-      let h = Math.abs(y - this.starty);
-      let sx = Math.min(x, this.startx);
-      let sy = Math.min(y, this.starty);
-      this.ctx.rect(sx, sy, w, h);
-      this.ctx.fillRect(sx, sy, w, h);
-      console.log(sx, sy, w, h);
+      this.currentAnnotation.setExtents(this.startx, x, this.starty, y);
+      this.refresh();
     }
   }
 
   @HostListener('mousedown', ['$event'])
   onMousedown(event: MouseEvent) {
     this.mouseDown = true;
+    //TODO: check if alt key is pressed (event.altKey). If yes, then we are moving the current shape, else drawing new shape.
+    // for now we are only drawing new shape
     this.startx = this.getX(event.clientX);
     this.starty = this.getY(event.clientY);
+    this.currentAnnotation = new Annotation();
+    this.annotations.push(this.currentAnnotation);
   }
 
 }
